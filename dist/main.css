@@ -1,0 +1,27 @@
+body {
+    max-width: 48em;
+}
+
+*,
+h1, h2, h3, h4, h5, h6 {
+    font-family: monospace;
+}
+
+main {
+    padding: 3rem;
+    position: relative;
+}
+
+blockquote {
+    font-size: 14px;
+}
+
+/* atomic */
+.p-0 { padding: 0; }
+.m-0 { margin: 0; }
+.w-full { width: 100%; }
+.mb-0 { margin-bottom: 0; }
+.rounded-none { border-radius: 0; }
+.flex { display: flex; }
+
+/* components */

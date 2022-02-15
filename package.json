@@ -1,0 +1,15 @@
+{
+	"type": "module",
+	"scripts": {
+		"build": "node ./scripts/build.js",
+		"dev": "node ./scripts/dev.js",
+		"server": "deno run --allow-read --allow-env --allow-net ./src/server/main.js"
+	},
+	"dependencies": {
+		"mithril": "^2.0.4"
+	},
+	"devDependencies": {
+		"esbuild": "^0.14.18",
+		"servbot": "^0.1.9"
+	}
+}
