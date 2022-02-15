@@ -3,14 +3,19 @@
 	"scripts": {
 		"build": "node ./scripts/build.js",
 		"dev": "node ./scripts/dev.js",
+		"dev:server": "denon run --allow-read --allow-env --allow-net ./src/server/main.js",
 		"server": "deno run --allow-read --allow-env --allow-net ./src/server/main.js"
 	},
 	"dependencies": {
-		"mithril": "github:mithrilJS/mithril.js#next"
+		"mithril": "github:mithrilJS/mithril.js#next",
+		"snarkdown": "^2.0.0"
 	},
 	"devDependencies": {
 		"env-smart": "^2.2.5",
 		"esbuild": "^0.14.18",
 		"servbot": "^0.1.9"
+	},
+	"volta": {
+		"node": "16.14.0"
 	}
 }

@@ -15,25 +15,33 @@ router
             error: false,
             message: '',
             data: {
+                nextPage: '',
+                prevPage: '',
                 results: []
             }
         };
 
         const params = ctx.request.url.searchParams;
-        const channel = params.get('channel') || '';
-        const user = params.get('user') || '';
-        const limit = params.get('limit') || 10;
-        const query = params.get('query') || '';
+        const channel = getParam(params.get('channel'), '');
+        const user = getParam(params.get('user'), '');
+        const limit = getParam(params.get('limit'), 10);
+        const term = getParam(params.get('term'), ''); 
+        const skip = getParam(params.get('skip'), '');
 
         let roomId = '';
-
         let roomRes = await getRoomId(channel);
 
         if (!roomRes.ok) {
             payload.message = 'Channel not found.';
         } else {
             roomId = roomRes.id;
-            const messageRes = await getChatMessages(roomId, limit, query);
+            let query = term;
+
+            if (user) {
+                query = `from:@${user.slice(0, 1) == '@' ? user.slice(1) : user} ${term}`;
+            }
+
+            const messageRes = await getChatMessages(roomId, limit, query, skip);
 
             if (!messageRes.ok) {
                 payload.error = true;
@@ -55,16 +63,18 @@ app.use(router.allowedMethods());
 app.addEventListener('listen', () => console.log(`Server listening on port ${PORT}`));
 await app.listen({ port: Number(PORT) });
 
-async function getChatMessages(roomId, limit, query) {
+async function getChatMessages(roomId, limit, query, skip) {
     const endpoint = `${API_URL}/rooms/${roomId}/chatMessages`;
     const payload = { ok: true, messages: [] };
 
     try {
-        const res = await get(endpoint, { limit, q: query });
+        console.log(skip);
+        const res = await get(endpoint, { limit, skip, q: query });
 
         // schema: https://developer.gitter.im/docs/messages-resource#parameters
-        // sort messages by ISO timestamp
-        res.sort((a, b) => b.sent - a.sent);
+        // sort messages by ISO timestamp, latest first
+        // disabled for now because no way to override Gitter API sort by score
+        // res.sort((a, b) => b.sent - a.sent);
 
         payload.messages = res;
     } catch (e) {
@@ -105,6 +115,18 @@ function get(url, params = {}) {
         }
     }).then(res => res.json());
 };
+
+function getParam(value, fallback) {
+    if (value == null || value == undefined) {
+        return fallback;
+    } else if (typeof value == 'string') {
+        let v = value.trim();
+        if (!v) return fallback;
+        return v;
+    }
+
+    return value;
+}
 
 function buildQueryString(params = {}) {
     return Object.entries(params).reduce((str, [key, value]) => {

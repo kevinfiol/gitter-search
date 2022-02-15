@@ -5,9 +5,11 @@ specifiers:
   esbuild: ^0.14.18
   mithril: github:mithrilJS/mithril.js#next
   servbot: ^0.1.9
+  snarkdown: ^2.0.0
 
 dependencies:
-  mithril: github.com/mithrilJS/mithril.js/e4bd2039b4424fdddeecb620783d5bcccd695648
+  mithril: github.com/mithrilJS/mithril.js/bcc61e42a99891ec6c4c8e2b0c98b6e0022f4294
+  snarkdown: 2.0.0
 
 devDependencies:
   env-smart: 2.2.5
@@ -288,12 +290,16 @@ packages:
     engines: {node: '>=12.x'}
     dev: true
 
+  /snarkdown/2.0.0:
+    resolution: {integrity: sha512-MgL/7k/AZdXCTJiNgrO7chgDqaB9FGM/1Tvlcenenb7div6obaDATzs16JhFyHHBGodHT3B7RzRc5qk8pFhg3A==}
+    dev: false
+
   /wrappy/1.0.2:
     resolution: {integrity: sha1-tSQ9jz7BqjXxNkYFvA0QNuMKtp8=}
     dev: false
 
-  github.com/mithrilJS/mithril.js/e4bd2039b4424fdddeecb620783d5bcccd695648:
-    resolution: {tarball: https://codeload.github.com/mithrilJS/mithril.js/tar.gz/e4bd2039b4424fdddeecb620783d5bcccd695648}
+  github.com/mithrilJS/mithril.js/bcc61e42a99891ec6c4c8e2b0c98b6e0022f4294:
+    resolution: {tarball: https://codeload.github.com/mithrilJS/mithril.js/tar.gz/bcc61e42a99891ec6c4c8e2b0c98b6e0022f4294}
     name: mithril
     version: 2.0.4
     hasBin: true

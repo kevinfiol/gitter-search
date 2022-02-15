@@ -5,8 +5,22 @@ import { Input } from './components/Input';
 const state = {
     results: [],
     inputs: {
-        channel: { placeholder: 'channel name', value: 'mithriljs/mithril.js' },
-        query: { placeholder: 'search terms', value: '' }
+        channel: {
+            attrs: { type: 'text', placeholder: 'channel name' },
+            value: 'mithriljs/mithril.js'
+        },
+        term: {
+            attrs: { type: 'text', placeholder: 'search term' },
+            value: 'hyperapp'
+        },
+        user: {
+            attrs: { type: 'text', placeholder: 'username' },
+            value: 'kevinfiol'
+        },
+        limit: {
+            attrs: { type: 'number', min: 0, max: 100 },
+            value: 2
+        }
     }
 };
 
@@ -24,26 +38,31 @@ m.mount(document.getElementById('app'), {
             m('form', {
                 onsubmit: async (ev) => {
                     ev.preventDefault();
-                    const { elements } = ev.target;
+                    const { channel, term, user, limit } = state.inputs;
 
-                    const channel = elements.channel.value;
-                    const query = elements.query.value;
+                    const res = await searchChannel({
+                        channel: channel.value,
+                        term: term.value,
+                        user: user.value,
+                        limit: limit.value
+                    });
 
-                    console.log('test');
-                    const res = await searchChannel(channel, query);
                     console.log(res);
                 }
             },
-                Object.keys(state.inputs).map(name =>
+                Object.entries(state.inputs).map(([name, input]) =>
                     m(Input, {
-                        name,
-                        placeholder: state.inputs[name].placeholder,
-                        value: state.inputs[name].value,
+                        ...input.attrs,
+                        value: input.value,
                         onInput: (value) => actions.setInput(name, value)
                     })
                 ),
 
                 m('button', { type: 'submit' }, 'search')
+            ),
+
+            m('div',
+
             )
         )
 });
