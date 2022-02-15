@@ -6,9 +6,10 @@
 		"server": "deno run --allow-read --allow-env --allow-net ./src/server/main.js"
 	},
 	"dependencies": {
-		"mithril": "^2.0.4"
+		"mithril": "github:mithrilJS/mithril.js#next"
 	},
 	"devDependencies": {
+		"env-smart": "^2.2.5",
 		"esbuild": "^0.14.18",
 		"servbot": "^0.1.9"
 	}

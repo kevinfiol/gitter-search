@@ -25,3 +25,17 @@ blockquote {
 .flex { display: flex; }
 
 /* components */
+.input {
+    line-height: 2em;
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 0;
+    border-radius: 0;
+}
+
+.spinner {
+    position: absolute;
+    font-weight: bolder;
+    top: 4%;
+    right: 4%;
+}

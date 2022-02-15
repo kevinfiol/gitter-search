@@ -52,7 +52,7 @@ app.use(oakCors());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-app.addEventListener('listen', () => console.log(`listening on port ${PORT}`));
+app.addEventListener('listen', () => console.log(`Server listening on port ${PORT}`));
 await app.listen({ port: Number(PORT) });
 
 async function getChatMessages(roomId, limit, query) {
