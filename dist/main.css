@@ -22,7 +22,6 @@ blockquote {
 .w-full { width: 100%; }
 .mb-0 { margin-bottom: 0; }
 .rounded-none { border-radius: 0; }
-.flex { display: flex; }
 
 /* components */
 .input {
@@ -36,6 +35,19 @@ blockquote {
 .input-group {
     display: flex;
 }
+
+.results-container {
+    margin-top: 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+    .results-container > .result {
+        background-color: #171415;
+        padding: 2rem;
+        padding-bottom: 1rem;
+        border-radius: 0.4rem;
+    }
 
 .spinner {
     position: absolute;

@@ -1,8 +1,14 @@
 import m from "mithril";
+import snarkdown from "snarkdown";
+import tinydate from "tinydate";
 import { searchChannel } from './api';
 import { Input } from './components/Input';
 
+const stamp = tinydate('{YYYY}-{MM}-{DD}');
+const now = new Date();
+
 const state = {
+    status: { loading: false, error: '' },
     results: [
       {
         "id": "5fe362f3c746c6431cd0fc16",
@@ -80,7 +86,7 @@ const state = {
         },
         term: {
             attrs: { type: 'text', placeholder: 'search term' },
-            value: 'hyperapp'
+            value: 'mithril'
         },
         user: {
             attrs: { type: 'text', placeholder: 'username' },
@@ -88,7 +94,15 @@ const state = {
         },
         limit: {
             attrs: { type: 'number', min: 0, max: 100 },
-            value: 2
+            value: 30
+        },
+        from: {
+            attrs: { type: 'date' },
+            value: stamp(new Date(now.getFullYear() - 1, now.getMonth(), now.getDate()))
+        },
+        to: {
+            attrs: { type: 'date' },
+            value: stamp(now)
         }
     }
 };
@@ -96,6 +110,11 @@ const state = {
 const actions = {
     setInput: (key, value) => {
         state.inputs[key].value = value;
+        console.log(state);
+    },
+
+    setResults: (results) => {
+        state.results = results;
     }
 };
 
@@ -109,14 +128,16 @@ m.mount(document.getElementById('app'), {
                     ev.preventDefault();
                     const { channel, term, user, limit } = state.inputs;
 
-                    const res = await searchChannel({
+                    const { data, error, message } = await searchChannel({
                         channel: channel.value,
                         term: term.value,
                         user: user.value,
                         limit: limit.value
                     });
 
-                    console.log(res);
+                    console.log(data.results.length);
+                    actions.setResults(data.results);
+                    m.redraw();
                 }
             },
                 Object.entries(state.inputs).map(([name, input]) =>
@@ -130,8 +151,15 @@ m.mount(document.getElementById('app'), {
                 m('button', { type: 'submit' }, 'search')
             ),
 
-            m('div',
-
-            )
+            !state.status.loading &&
+                m('div.results-container',
+                    state.results.map((result) =>
+                        m('div.result',
+                            m('b', result.fromUser.username),
+                            m('p', m.trust(snarkdown(result.text)))
+                        )
+                    )
+                )
+            ,
         )
 });
