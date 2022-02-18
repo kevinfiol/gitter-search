@@ -15,39 +15,57 @@ router
             error: false,
             message: '',
             data: {
-                nextPage: '',
-                prevPage: '',
+                roomId: '',
+                roomName: '',
                 results: []
             }
         };
 
         const params = ctx.request.url.searchParams;
-        const channel = getParam(params.get('channel'), '');
+
+        const roomName = getParam(params.get('roomName'), '');
         const user = getParam(params.get('user'), '');
         const limit = getParam(params.get('limit'), 10);
         const term = getParam(params.get('term'), ''); 
         const skip = getParam(params.get('skip'), '');
+        const from = getParam(params.get('from'), '');
+        const to = getParam(params.get('to'), '');
+        let roomId = getParam(params.get('roomId'), '');
 
-        let roomId = '';
-        let roomRes = await getRoomId(channel);
+        if (!roomId) {
+            const roomRes = await getRoomId(roomName);
 
-        if (!roomRes.ok) {
-            payload.message = 'Channel not found.';
-        } else {
-            roomId = roomRes.id;
+            if (!roomRes.ok) {
+                payload.message = 'Room not found.';
+            } else {
+                roomId = roomRes.id;
+            }
+        }
+
+        if (roomId) {
             let query = term;
 
             if (user) {
                 query = `from:@${user.slice(0, 1) == '@' ? user.slice(1) : user} ${term}`;
             }
 
+            if (from || to) {
+                query = `sent:[${from || '*'} TO ${to || '*'}] ${query}`;
+            }
+
+            console.log(query);
             const messageRes = await getChatMessages(roomId, limit, query, skip);
 
             if (!messageRes.ok) {
                 payload.error = true;
                 payload.message = 'Could not retrieve messages. Error occured.';
             } else {
-                payload.data.results = messageRes.messages;
+                payload.data = {
+                    ...payload.data,
+                    roomId,
+                    roomName,
+                    results: messageRes.messages
+                };
             }
         }
 
@@ -73,8 +91,7 @@ async function getChatMessages(roomId, limit, query, skip) {
 
         // schema: https://developer.gitter.im/docs/messages-resource#parameters
         // sort messages by ISO timestamp, latest first
-        // disabled for now because no way to override Gitter API sort by score
-        // res.sort((a, b) => b.sent - a.sent);
+        res.sort((a, b) => b.sent > a.sent ? 1 : (b.sent < a.sent ? -1 : 0));
 
         payload.messages = res;
     } catch (e) {
