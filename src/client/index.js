@@ -165,7 +165,7 @@ const App = ({ attrs: { scope, name } }) => {
                         )
                     ,
 
-                    state.data.roomId &&
+                    state.data.roomId && !state.status.error &&
                         m('div.results-container', { class: state.status.loading ? 'opacity-50' : '' },
                             m('div.flex.flex-center.monospace',
                                 `${state.data.results.length} results`
