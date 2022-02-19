@@ -13,8 +13,8 @@ const messageUrlStamp = (messageId, roomName) => `${GITTER_URL}/${roomName}?at=$
 const state = {
     status: { loading: false, error: '' },
     inputs: {
-        room: 'mithriljs/mithril.js',
-        term: 'mithril',
+        room: '',
+        term: '',
         user: '',
         limit: 50,
         from: dateStamp(new Date(NOW.getFullYear() - 2, NOW.getMonth(), NOW.getDate())),
