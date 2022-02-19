@@ -103,7 +103,13 @@ const App = ({ attrs: { scope, name } }) => {
                             placeholder: 'mithriljs/mithril.js',
                             required: true,
                             value: state.inputs.room,
-                            oninput: ({ target }) => actions.setInput('room', target.value)
+                            oninput: ({ target }) => {
+                                actions.setInput('room', target.value);
+                                if (state.data.roomId || state.data.roomName) {
+                                    actions.setRoomId('');
+                                    actions.setRoomName('');
+                                }
+                            }
                         }),
 
                         m('input.input', {
