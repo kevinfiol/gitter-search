@@ -69,6 +69,7 @@ const App = ({ attrs: { scope, name } }) => {
                 m('form', {
                     onsubmit: async (ev) => {
                         ev.preventDefault();
+                        if (state.status.loading) return;
                         const { room, term, user, limit, from, to } = state.inputs;
 
                         actions.setLoading(true);
