@@ -1,6 +1,10 @@
-import "https://deno.land/x/dotenv/load.ts";
+import { load } from "https://deno.land/x/denv@3.0.0/mod.ts";
 import { Application, Router } from 'https://deno.land/x/oak@v10.2.1/mod.ts';
 import { oakCors } from 'https://deno.land/x/cors@v1.2.2/mod.ts';
+
+if (!Deno.env.get('PROD')) {
+    await load({ path: '.env' });
+}
 
 const API_URL = 'https://api.gitter.im/v1';
 const BEARER_TOKEN = Deno.env.get('GITTER_BEARER_TOKEN');
