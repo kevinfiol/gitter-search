@@ -1,8 +1,6 @@
 import m from "mithril";
-import snarkdown from "snarkdown";
 import tinydate from "tinydate";
 import { searchRoom } from './api';
-import { Input } from './components/Input';
 import { Spinner } from './components/Spinner';
 
 const NOW = new Date();
@@ -15,61 +13,45 @@ const messageUrlStamp = (messageId, roomName) => `${GITTER_URL}/${roomName}?at=$
 const state = {
     status: { loading: false, error: '' },
     inputs: {
-        room: {
-            attrs: { type: 'text', placeholder: 'room name, e.g. `mithriljs/mithril.js`' },
-            value: ''
-        },
-        term: {
-            attrs: { type: 'text', placeholder: 'search term' },
-            value: ''
-        },
-        user: {
-            attrs: { type: 'text', placeholder: 'username' },
-            value: ''
-        },
-        limit: {
-            attrs: { type: 'number', min: 0, max: 100 },
-            value: 50
-        },
-        from: {
-            attrs: { type: 'date' },
-            // default to a 2 year window
-            value: dateStamp(new Date(NOW.getFullYear() - 2, NOW.getMonth(), NOW.getDate()))
-        },
-        to: {
-            attrs: { type: 'date' },
-            value: dateStamp(NOW)
-        }
+        room: 'mithriljs/mithril.js',
+        term: 'mithril',
+        user: '',
+        limit: 50,
+        from: dateStamp(new Date(NOW.getFullYear() - 2, NOW.getMonth(), NOW.getDate())),
+        to: dateStamp(NOW)
     },
     data: {
-        room: {
-            roomId: '',
-            roomName: '',
-        },
+        roomId: '',
+        roomName: '',
         results: [],
     }
 };
 
 const actions = {
     setLoading: (loading) => {
+        if (loading) state.status.error = '';
         state.status.loading = loading;
         m.redraw();
     },
 
+    setError: (error) => {
+        state.status.error = error;
+    },
+
     setInput: (key, value) => {
-        state.inputs[key].value = value;
+        state.inputs[key] = value;
     },
 
     setResults: (results) => {
         state.data.results = results;
     },
 
-    setRoomData: ({ roomId, roomName }) => {
-        state.data.room = {
-            ...state.data.room,
-            roomId,
-            roomName
-        };
+    setRoomName: (roomName) => {
+        state.data.roomName = roomName;
+    },
+
+    setRoomId: (roomId) => {
+        state.data.roomId = roomId;
     }
 };
 
@@ -82,7 +64,7 @@ const App = ({ attrs: { scope, name } }) => {
     return {
         view: () =>
             m('div',
-                m('h1', 'gitter search'),
+                m('h1', 'gitter.im search'),
 
                 m('form', {
                     onsubmit: async (ev) => {
@@ -92,34 +74,87 @@ const App = ({ attrs: { scope, name } }) => {
                         actions.setLoading(true);
 
                         const { data, error, message } = await searchRoom({
-                            roomName: room.value,
-                            term: term.value,
-                            user: user.value,
-                            limit: limit.value,
-                            from: from.value,
-                            to: to.value
+                            roomId: state.data.roomId,
+                            roomName: room,
+                            term: term,
+                            user: user,
+                            limit: limit,
+                            from: from,
+                            to: to
                         });
 
-                        const { results, roomId, roomName } = data;
-                        actions.setResults(results);
-                        actions.setRoomData({ roomId, roomName });
+                        if (error) {
+                            console.error(message);
+                            actions.setError(message);
+                        } else {
+                            const { results, roomId, roomName } = data;
+                            actions.setResults(results);
+                            actions.setRoomId(roomId);
+                            actions.setRoomName(roomName);
+                        }
+
                         actions.setLoading(false);
                     }
                 },
-                    Object.entries(state.inputs).map(([name, input]) =>
-                        m(Input, {
-                            ...input.attrs,
-                            value: input.value,
-                            onInput: (value) => actions.setInput(name, value)
+                    m('div.input-group',
+                        m('input.input', {
+                            type: 'text',
+                            placeholder: 'mithriljs/mithril.js',
+                            value: state.inputs.room,
+                            oninput: ({ target }) => actions.setInput('room', target.value)
+                        }),
+
+                        m('input.input', {
+                            type: 'text',
+                            placeholder: 'username',
+                            value: state.inputs.user,
+                            oninput: ({ target }) => actions.setInput('user', target.value)
+                        }),
+
+                        m('input.input', {
+                            type: 'number',
+                            min: 0,
+                            max: 100,
+                            value: state.inputs.limit,
+                            oninput: ({ target }) => actions.setInput('limit', target.value)
                         })
                     ),
 
-                    m('button', { type: 'submit' }, 'search')
+                    m('div.input-group',
+                        m('input.input', {
+                            type: 'date',
+                            value: state.inputs.from,
+                            oninput: ({ target }) => actions.setInput('from', target.value)
+                        }),
+
+                        m('input.input', {
+                            type: 'date',
+                            value: state.inputs.to,
+                            oninput: ({ target }) => actions.setInput('to', target.value)
+                        })
+                    ),
+
+                    m('div.input-group',
+                        m('input.input.term-input', {
+                            type: 'text',
+                            placeholder: 'search terms',
+                            value: state.inputs.term,
+                            oninput: ({ target }) => actions.setInput('term', target.value)
+                        }),
+
+                        m('button', { type: 'submit' }, 'search')
+                    )
                 ),
 
                 m('div.search-content',
                     state.status.loading &&
                         m(Spinner)
+                    ,
+
+                    state.status.error &&
+                        m('div.error',
+                            state.status.error
+                        )
                     ,
 
                     state.data.results.length > 0 &&
@@ -129,12 +164,12 @@ const App = ({ attrs: { scope, name } }) => {
                                     m('div.flex.space-between',
                                         m('b', result.fromUser.username),
                                         m('span',
-                                            m('a', { href: messageUrlStamp(result.id, state.data.room.roomName) },
+                                            m('a', { href: messageUrlStamp(result.id, state.data.roomName) },
                                                 timeStamp(new Date(result.sent))
                                             )
                                         )
                                     ),
-                                    m('p', m.trust(snarkdown(result.text)))
+                                    m('p', m.trust(result.html))
                                 )
                             )
                         )

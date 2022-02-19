@@ -40,7 +40,8 @@ router
             const roomRes = await getRoomId(roomName);
 
             if (!roomRes.ok) {
-                payload.message = 'Room not found.';
+                payload.error = true;
+                payload.message = 'room not found.';
             } else {
                 roomId = roomRes.id;
             }
@@ -61,7 +62,7 @@ router
 
             if (!messageRes.ok) {
                 payload.error = true;
-                payload.message = 'Could not retrieve messages. Error occured.';
+                payload.message = 'error! could not retrieve messages.';
             } else {
                 payload.data = {
                     ...payload.data,
