@@ -57,7 +57,6 @@ router
                 query = `sent:[${from || '*'} TO ${to || '*'}] ${query}`;
             }
 
-            console.log(query);
             const messageRes = await getChatMessages(roomId, limit, query, skip);
 
             if (!messageRes.ok) {
@@ -90,7 +89,6 @@ async function getChatMessages(roomId, limit, query, skip) {
     const payload = { ok: true, messages: [] };
 
     try {
-        console.log(skip);
         const res = await get(endpoint, { limit, skip, q: query });
 
         // schema: https://developer.gitter.im/docs/messages-resource#parameters
