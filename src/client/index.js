@@ -152,13 +152,17 @@ const App = ({ attrs: { scope, name } }) => {
                     ,
 
                     state.status.error &&
-                        m('div.error',
+                        m('div.message',
                             state.status.error
                         )
                     ,
 
-                    state.data.results.length > 0 &&
+                    state.data.roomId &&
                         m('div.results-container', { class: state.status.loading ? 'opacity-50' : '' },
+                            m('div.flex.flex-center.monospace',
+                                `${state.data.results.length} results`
+                            ),
+
                             state.data.results.map((result) =>
                                 m('div.result',
                                     m('div.flex.space-between',

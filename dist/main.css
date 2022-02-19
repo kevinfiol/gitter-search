@@ -31,7 +31,9 @@ button {
 .flex { display: flex; }
 .space-between { justify-content: space-between; }
 .flex-end { justify-content: flex-end; }
+.flex-center { justify-content: center; }
 .opacity-50 { opacity: 0.5; }
+.monospace { font-family: monospace; }
 
 /* components */
 .input {
@@ -63,7 +65,7 @@ button {
     position: relative;
 }
 
-    .search-content > .error {
+    .search-content > .message {
         font-family: monospace;
         text-align: center;
         font-size: 2em;
