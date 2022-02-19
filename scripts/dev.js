@@ -7,7 +7,13 @@ const PORT = 8080;
 const server = servbot({
   root: 'dist',
   reload: true,
-  fallback: 'index.html'
+  fallback: 'index.html',
+  ignores: [
+    // don't pass app.js to the SPA
+    /\/app.js/i,
+    // don't pass assets at root level to SPA
+    /^\/([^/]+?)\.(css|png|ico)\/?$/i
+  ]
 });
 
 server.listen(PORT);
