@@ -70,12 +70,18 @@ const App = ({ attrs: { scope, name } }) => {
                     onsubmit: async (ev) => {
                         ev.preventDefault();
                         if (state.status.loading) return;
-                        const { room, term, user, limit, from, to } = state.inputs;
 
+                        const { room, term, user, limit, from, to } = state.inputs;
                         actions.setLoading(true);
 
+                        let roomId = state.data.roomId;
+
+                        if (room !== state.data.roomName) {
+                            roomId = '';
+                        }
+
                         const { data, error, message } = await searchRoom({
-                            roomId: state.data.roomId,
+                            roomId,
                             roomName: room,
                             term: term,
                             user: user,
@@ -103,13 +109,7 @@ const App = ({ attrs: { scope, name } }) => {
                             placeholder: 'mithriljs/mithril.js',
                             required: true,
                             value: state.inputs.room,
-                            oninput: ({ target }) => {
-                                actions.setInput('room', target.value);
-                                if (state.data.roomId || state.data.roomName) {
-                                    actions.setRoomId('');
-                                    actions.setRoomName('');
-                                }
-                            }
+                            oninput: ({ target }) => actions.setInput('room', target.value)
                         }),
 
                         m('input.input', {
