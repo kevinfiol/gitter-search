@@ -100,6 +100,7 @@ const App = ({ attrs: { scope, name } }) => {
                         m('input.input', {
                             type: 'text',
                             placeholder: 'mithriljs/mithril.js',
+                            required: true,
                             value: state.inputs.room,
                             oninput: ({ target }) => actions.setInput('room', target.value)
                         }),
