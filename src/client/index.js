@@ -64,7 +64,7 @@ const App = ({ attrs: { scope, name } }) => {
     return {
         view: () =>
             m('div',
-                m('h1', 'gitter.im search'),
+                m('h1', m('a[href="/"]', 'gitter.im search')),
 
                 m('form', {
                     onsubmit: async (ev) => {
@@ -143,7 +143,7 @@ const App = ({ attrs: { scope, name } }) => {
                     ),
 
                     m('div.input-group',
-                        m('input.input.term-input', {
+                        m('input.input.font-1-em', {
                             type: 'text',
                             placeholder: 'search terms',
                             value: state.inputs.term,
