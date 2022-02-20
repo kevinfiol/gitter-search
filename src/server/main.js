@@ -58,6 +58,7 @@ router
                 query = `sent:[${from || '*'} TO ${to || '*'}] ${query}`;
             }
 
+            console.log(query);
             const messageRes = await getChatMessages(roomId, limit, query, skip);
 
             if (!messageRes.ok) {
@@ -91,6 +92,10 @@ async function getChatMessages(roomId, limit, query, skip) {
 
     try {
         const res = await get(endpoint, { limit, skip, q: query });
+
+        if (!Array.isArray(res) || res.error) {
+            throw Error(res.error || 'Gitter API did not return an array of messages');
+        }
 
         // schema: https://developer.gitter.im/docs/messages-resource#parameters
         // sort messages by ISO timestamp, latest first

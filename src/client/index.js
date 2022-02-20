@@ -173,7 +173,7 @@ const App = ({ attrs: { scope, name } }) => {
 
                             state.data.results.map((result) =>
                                 m('div.result',
-                                    m('div.flex.space-between',
+                                    m('div.header',
                                         m('b', result.fromUser.username),
                                         m('span',
                                             m('a', { href: messageUrlStamp(result.id, state.data.roomName) },

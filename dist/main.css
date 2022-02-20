@@ -1,3 +1,23 @@
+:root {
+    --main-padding: 3rem;
+    --input-group-direction: row;
+    --button-padding: 0.8rem 1rem;
+    --result-direction: row;
+    --result-justify: space-between;
+    --result-margin: 0;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --main-padding: 0.25rem;
+        --input-group-direction: column;
+        --button-padding: 1.8rem 1.5rem;
+        --result-direction: column;
+        --result-justify: flex-end;
+        --result-margin: 0 0 1.25rem 0;
+    }
+}
+
 body {
     max-width: 48em;
 }
@@ -9,7 +29,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 main {
-    padding: 3rem;
+    padding: var(--main-padding);
     position: relative;
 }
 
@@ -18,8 +38,7 @@ blockquote {
 }
 
 button {
-    /*padding: 1rem;*/
-    /*font-size: 1.5rem;*/
+    padding: var(--button-padding);
 }
 
 /* atomic */
@@ -50,6 +69,7 @@ button {
 
 .input-group {
     display: flex;
+    flex-direction: var(--input-group-direction);
     gap: 1px;
     padding-bottom: 1px;
 }
@@ -68,7 +88,7 @@ button {
     .search-content > .message {
         font-family: monospace;
         text-align: center;
-        font-size: 2em;
+        font-size: 1.2em;
         margin-top: 5rem;
     }
 
@@ -92,3 +112,11 @@ button {
             padding-bottom: 0;
             border-radius: 0.4rem;
         }
+
+            .search-content > .results-container > .result
+                > .header {
+                    display: flex;
+                    flex-direction: var(--result-direction);
+                    justify-content: var(--result-justify);
+                    margin: var(--result-margin);
+                }
