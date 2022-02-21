@@ -69,13 +69,13 @@ const App = ({ attrs: { scope, name } }) => {
                 m('form', {
                     onsubmit: async (ev) => {
                         ev.preventDefault();
-                        if (state.status.loading) return;
-
                         const { room, term, user, limit, from, to } = state.inputs;
+
+                        if (state.status.loading || (!user.trim() && !term.trim())) return;
                         actions.setLoading(true);
 
+                        // save having to refetch the roomId if room has not changed since last search
                         let roomId = state.data.roomId;
-
                         if (room !== state.data.roomName) {
                             roomId = '';
                         }
