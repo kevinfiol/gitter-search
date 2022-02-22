@@ -98,7 +98,7 @@ button {
 }
 
     .search-content > .message {
-        margin-top: 5rem;
+        margin-top: 3rem;
     }
 
     .search-content > .spinner {
@@ -108,7 +108,7 @@ button {
     }
 
     .search-content > .results-container {
-        margin-top: 4rem;
+        margin-top: 2rem;
     }
 
 /* atomic */
