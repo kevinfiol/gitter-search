@@ -1,6 +1,6 @@
 # gitter-search
 
-A tool to search [Gitter](https://gitter.im) rooms.
+A tool to search [Gitter](https://gitter.im) rooms. Built with [Mithril.js](https://mithril.js.org).
 
 ## Usage
 
