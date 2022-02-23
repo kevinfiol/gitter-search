@@ -93,6 +93,7 @@ const App = ({ attrs: { scope, name } }) => {
                         if (error) {
                             console.error(message);
                             actions.setError(message);
+                            actions.setResults([]);
                         } else {
                             const { results, roomId, roomName } = data;
                             actions.setResults(results);
