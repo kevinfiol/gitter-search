@@ -7,7 +7,7 @@
 		"server": "deno run --allow-read --allow-env --allow-net ./src/server/main.js"
 	},
 	"dependencies": {
-		"mithril": "github:mithrilJS/mithril.js#next",
+		"mithril": "github:mithrilJS/mithril.js#9906e23118ef2bfaffc09c13ddd0dd051f5d895b",
 		"tinydate": "^1.3.0"
 	},
 	"devDependencies": {
